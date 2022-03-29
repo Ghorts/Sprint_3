@@ -1,4 +1,4 @@
-package testSettings;
+package settings.model;
 
 public class AvailableStations {
     private String name;

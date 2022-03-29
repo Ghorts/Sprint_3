@@ -1,7 +1,9 @@
-package testSettings;
+package settings.client;
 
-import io.restassured.response.Response;
+
 import io.restassured.response.ValidatableResponse;
+import settings.model.CourierLoginCredentials;
+import settings.utils.RequestSettings;
 
 import static io.restassured.RestAssured.given;
 
@@ -47,5 +49,19 @@ public class CourierBasicRequests extends RequestSettings {
                 .when()
                 .post("/api/v1/courier/login")
                 .then();
+    }
+
+    public static ValidatableResponse loginBody(String body) {
+        return given()
+                .spec(getBaseSpec())
+                .body(body)
+                .when()
+                .post("/api/v1/courier/login")
+                .then();
+
+    }
+
+    public static ValidatableResponse createBody(String body) {
+        return given().spec(getBaseSpec()).body(body).when().post("/api/v1/courier/").then();
     }
 }
