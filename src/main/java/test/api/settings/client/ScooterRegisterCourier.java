@@ -1,4 +1,4 @@
-package settings.client;// импортируем RestAssured
+package test.api.settings.client;// импортируем RestAssured
 // импортируем Response
 
 import io.restassured.RestAssured;

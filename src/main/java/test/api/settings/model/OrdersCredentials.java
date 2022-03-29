@@ -1,4 +1,4 @@
-package settings.model;
+package test.api.settings.model;
 
 public class OrdersCredentials {
     private String firstName;

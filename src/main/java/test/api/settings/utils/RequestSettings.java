@@ -1,4 +1,4 @@
-package settings.utils;
+package test.api.settings.utils;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;

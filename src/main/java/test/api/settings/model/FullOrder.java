@@ -1,4 +1,4 @@
-package settings.model;
+package test.api.settings.model;
 
 import java.util.List;
 

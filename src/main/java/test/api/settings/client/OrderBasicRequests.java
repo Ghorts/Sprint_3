@@ -1,10 +1,10 @@
-package settings.client;
+package test.api.settings.client;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
-import settings.model.OrdersCredentials;
-import settings.utils.RequestSettings;
+import test.api.settings.model.OrdersCredentials;
+import test.api.settings.utils.RequestSettings;
 
 import static io.restassured.RestAssured.given;
 

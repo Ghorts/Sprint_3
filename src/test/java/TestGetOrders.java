@@ -1,21 +1,30 @@
-
+import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
+import io.restassured.response.Response;
 import org.junit.Test;
-import testSettings.FullOrder;
+import test.api.settings.client.OrderBasicRequests;
+import test.api.settings.model.FullOrder;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
-import static testSettings.RequestSettings.getBaseSpec;
 
 public class TestGetOrders {
     @Test
     @DisplayName("Запрос возвращает список заказов в теле ответа")
     public void getOrdersLimit10ReturnListOfOrders() {
-        FullOrder response = given()
-                .spec(getBaseSpec())
-                .when()
-                .get("/api/v1/orders?limit=10").body().as(FullOrder.class);
-        assertEquals(response.getOrders().isEmpty(), false);
+        FullOrder response = getOrders(10).body().as(FullOrder.class);
+        assertBody(response);
 
     }
+
+    @Step("Отправка запроса на получение списка заказов")
+    public Response getOrders(int limit) {
+        return OrderBasicRequests.getOrdersLimit(limit);
+    }
+
+    @Step("Проверка тела ответа на наличие заказов")
+    public void assertBody(FullOrder response) {
+        assertEquals(response.getOrders().isEmpty(), false);
+    }
 }
+
+
