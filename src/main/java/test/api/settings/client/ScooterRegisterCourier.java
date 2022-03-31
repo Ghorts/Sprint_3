@@ -1,5 +1,4 @@
-package test.api.settings.client;// импортируем RestAssured
-// импортируем Response
+package test.api.settings.client;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -9,8 +8,7 @@ import java.util.ArrayList;
 
 public class ScooterRegisterCourier {
 
-    public ArrayList<String> registerNewCourierAndReturnLoginPassword() {
-
+    public static ArrayList<String> registerNewCourierAndReturnLoginPassword() {
         // с помощью библиотеки RandomStringUtils генерируем логин
         // метод randomAlphabetic генерирует строку, состоящую только из букв, в качестве параметра передаём длину строки
         String courierLogin = RandomStringUtils.randomAlphabetic(10);
@@ -18,15 +16,12 @@ public class ScooterRegisterCourier {
         String courierPassword = RandomStringUtils.randomAlphabetic(10);
         // с помощью библиотеки RandomStringUtils генерируем имя курьера
         String courierFirstName = RandomStringUtils.randomAlphabetic(10);
-
         // создаём список, чтобы метод мог его вернуть
         ArrayList<String> loginPass = new ArrayList<>();
-
         // собираем в строку тело запроса на регистрацию, подставляя в него логин, пароль и имя курьера
         String registerRequestBody = "{\"login\":\"" + courierLogin + "\","
                 + "\"password\":\"" + courierPassword + "\","
                 + "\"firstName\":\"" + courierFirstName + "\"}";
-
         // отправляем запрос на регистрацию курьера и сохраняем ответ в переменную response класса Response
         Response response = RestAssured.given()
                 .header("Content-type", "application/json")
@@ -34,16 +29,13 @@ public class ScooterRegisterCourier {
                 .body(registerRequestBody)
                 .when()
                 .post("https://qa-scooter.praktikum-services.ru/api/v1/courier");
-
         // если регистрация прошла успешно (код ответа 201), добавляем в список логин и пароль курьера
         if (response.statusCode() == 201) {
             loginPass.add(courierLogin);
             loginPass.add(courierPassword);
         }
-
         // возвращаем список
         return loginPass;
-
     }
 
 }

@@ -1,11 +1,9 @@
-import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
-import test.api.settings.client.CourierBasicRequests;
+import test.api.settings.client.CourierClient;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.equalTo;
 
 public class TestCreatingCourier {
     String courierLogin = RandomStringUtils.randomAlphabetic(10);
@@ -15,40 +13,28 @@ public class TestCreatingCourier {
     @Test
     @DisplayName("Создание курьера без поля логин выдаёт ошибку")
     public void courierCreationWithoutLoginShowsError() {
-        ValidatableResponse createResponse = postCourier("{\"password\":\"" + courierPassword + "\"," + "\"firstName\":\"" + courierFirstName + "\"}");
-        assertStatusCode(createResponse, 400);
-        assertBody(createResponse);
+        CourierClient.postCourier("{\"password\":\"" + courierPassword + "\"," + "\"firstName\":\"" + courierFirstName + "\"}")
+                .statusCode(400)
+                .and()
+                .assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 
     @Test
     @DisplayName("Создание курьера без поля пароль выдаёт ошибку")
     public void courierCreationWithoutPasswordShowsError() {
-        ValidatableResponse createResponse = postCourier("{\"login\":\"" + courierLogin + "\"," + "\"firstName\":\"" + courierFirstName + "\"}");
-        assertStatusCode(createResponse, 400);
-        assertBody(createResponse);
+        CourierClient.postCourier("{\"login\":\"" + courierLogin + "\"," + "\"firstName\":\"" + courierFirstName + "\"}")
+                .statusCode(400)
+                .and()
+                .assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 
     @Test
     @DisplayName("Создание курьера без поля имя выдаёт ошибку")
     public void courierCreationFirstNameIsNullShowsError() {
-        ValidatableResponse createResponse = postCourier("{\"login\":\"" + courierLogin + "\"," + "\"password\":\"" + courierPassword + "\"}");
-        assertStatusCode(createResponse, 400);
-        assertBody(createResponse);
-    }
+        CourierClient.postCourier("{\"login\":\"" + courierLogin + "\"," + "\"password\":\"" + courierPassword + "\"}")
+                .statusCode(400)
+                .and()
+                .assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"));
 
-    @Step("Отправка запроса на создание курьера")
-    public ValidatableResponse postCourier(String body) {
-        return CourierBasicRequests.createBody(body);
-    }
-
-    @Step("Сравнить код ответа")
-    public void assertStatusCode(ValidatableResponse response, int code) {
-        response.statusCode(code);
-    }
-
-    @Step("Сравниваем тело ответа")
-    public void assertBody(ValidatableResponse createResponse) {
-        String responseText = createResponse.extract().path("message");
-        assertEquals("Недостаточно данных для создания учетной записи", responseText);
     }
 }

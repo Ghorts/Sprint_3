@@ -1,10 +1,10 @@
-package test.api.settings.utils;
+package test.api.settings.client;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
-public class RequestSettings {
+public class ApiClient {
 
     public static final String BASE_URL = "http://qa-scooter.praktikum-services.ru";
 
