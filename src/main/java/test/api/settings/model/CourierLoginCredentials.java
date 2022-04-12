@@ -1,6 +1,4 @@
-package testSettings;
-
-import org.apache.commons.lang3.RandomStringUtils;
+package test.api.settings.model;
 
 public class CourierLoginCredentials {
 

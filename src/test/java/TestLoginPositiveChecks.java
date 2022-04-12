@@ -3,21 +3,20 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import testSettings.CourierBasicRequests;
-import testSettings.CourierLoginCredentials;
-import testSettings.scooterRegisterCourier;
+import test.api.settings.client.CourierClient;
+import test.api.settings.client.ScooterRegisterCourier;
+import test.api.settings.model.CourierLoginCredentials;
 
 import java.util.ArrayList;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
-import static testSettings.RequestSettings.getBaseSpec;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 public class TestLoginPositiveChecks {
-    scooterRegisterCourier register = new scooterRegisterCourier();
+    ScooterRegisterCourier register;
     ArrayList<String> loginPass;
     int courierId;
-    CourierBasicRequests requests;
+    ValidatableResponse loginResponse;
 
     @Before
     public void setUp() {
@@ -26,16 +25,17 @@ public class TestLoginPositiveChecks {
 
     @After
     public void tearDown() {
-        requests.delete(courierId);
+        courierId = loginResponse.extract().path("id");
+        CourierClient.deleteCourier(courierId);
     }
 
     @Test
     @DisplayName("Успешный лог-ин с валидными данными")
     public void courierLoginWithValidCredentialsSuccessful() {
         CourierLoginCredentials credentials = new CourierLoginCredentials(loginPass.get(0), loginPass.get(1));
-        ValidatableResponse loginResponse = requests.loginJson(credentials).statusCode(200).and().body("id", is(not(0)));
-        courierId = loginResponse.extract().path("id");
-
+        loginResponse = CourierClient.logIn(credentials)
+                .statusCode(200)
+                .and()
+                .assertThat().body("id", is(not(0)));
     }
-
 }
